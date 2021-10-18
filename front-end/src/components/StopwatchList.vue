@@ -1,12 +1,12 @@
 <template>
-  <div>
+  <div style="display:flex; flex-direction:column">
     <div class="center-content">
       <h1 id="title">cronômetro</h1>
     </div>
     <div class="row">
       <div class="fixed-list">
         <div id="container">
-          <stopwatch-item />
+          <StopwatchItem />
         </div>
       </div>
       <div>
