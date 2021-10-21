@@ -10,10 +10,7 @@
           :key="stopwatches.id"
           id="container"
         >
-          <StopwatchItem 
-          :name="stopwatches.timer_name" 
-          :time="stopwatches.time"
-          />
+          <StopwatchItem :name="stopwatches.timer_name" />
         </div>
       </div>
       <div>
@@ -29,7 +26,12 @@
               v-model="stopwatchName"
               @keyup.enter="addStopwatch"
             />
-            <input id="submit" type="button" value="Create Stopwatch" />
+            <input
+              id="submit"
+              type="button"
+              value="Create Stopwatch"
+              @click="addStopwatch"
+            />
           </form>
         </div>
       </div>
@@ -48,27 +50,18 @@ export default {
   data() {
     return {
       stopwatchName: "",
-      stopwatchLists: [
-        {
-          id: 10,
-          timer_name: "Webdev",
-          time: 59,
-          state: "pause",
-        },
-        {
-          id: 11,
-          timer_name: "Komnum",
-          time: 87,
-          state: "start",
-        },
-      ],
+      stopwatchLists: [],
     };
   },
   methods: {
     addStopwatch() {
-      // TULIS CODE UNTUK PUSH ARRAY OF OBJECT stopwatchLists
-      // ALERT HANYA UNTUK TESTING APAKAH INPUT stopwatchName BERHASIL DIKIRIM
-      alert(this.stopwatchName);
+      var name = this.stopwatchName;
+      var stopwatch = {
+        id: this.stopwatchLists.length,
+        timer_name: name,
+      };
+
+      this.stopwatchLists.push(stopwatch);
     },
   },
 };
