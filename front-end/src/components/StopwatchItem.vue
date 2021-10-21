@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <h1 name class="name dark-blue">WebDev Teori</h1>
+      <h1 name class="name dark-blue">{{name}}</h1>
       <img delete class="del-btn" src="../assets/delete.svg" />
     </div>
     <div>
@@ -37,6 +37,12 @@
 <script>
 export default {
   name: "StopwatchItem",
+  props:{
+    name:{
+      type:String,
+      required:true
+    },
+  },
   data: function () {
     return {
       time: 0,
