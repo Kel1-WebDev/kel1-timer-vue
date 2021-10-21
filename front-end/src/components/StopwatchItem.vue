@@ -15,8 +15,15 @@
     </div>
     <div>
       <div history class="history">
-        <button showHistory class="accordion"><span> ▶ </span> History</button>
-        <div historyList class="history-list"></div>
+        <button @click="toggleHistory()" class="accordion">
+          <span v-if="isHistoryShown"> ▼ </span> 
+          <span v-else> ▶ </span> History
+        </button>
+        <div v-if="isHistoryShown" class="history-list">
+          <li v-for="(item,index) in histories" :key="index"> 
+            <span>{{ formatTime(item) }}</span>
+          </li>
+        </div>
       </div>
     </div>
   </div>
@@ -29,7 +36,9 @@ export default {
     return {
       time: 0,
       state: "stop",
-      interval: null
+      interval: null,
+      histories: [],
+      isHistoryShown: false
     }
   },
   methods: {
@@ -66,7 +75,15 @@ export default {
     stop() {
       this.state = "stop";
       clearInterval(this.interval);
+      
+      if (this.time > 0) {
+        this.histories.push(this.time);
+      }
+
       this.time = 0;
+    },
+    toggleHistory() {
+      this.isHistoryShown = !this.isHistoryShown;
     }
   },
 };
