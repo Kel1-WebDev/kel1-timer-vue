@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <h1 name class="name dark-blue">{{name}}</h1>
-      <img delete class="del-btn" src="../assets/delete.svg" />
+      <img delete class="del-btn" src="../assets/delete.svg" @click="$emit('remove')"/>
     </div>
     <div>
       <div class="blabla">
@@ -107,6 +107,7 @@ export default {
       this.isHistoryShown = !this.isHistoryShown;
     },
   },
+  emits: ['remove']
 };
 </script>
 
