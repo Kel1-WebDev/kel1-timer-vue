@@ -21,11 +21,11 @@
     <div>
       <div history class="history">
         <button @click="toggleHistory()" class="accordion">
-          <span v-if="isHistoryShown"> ▼ </span> 
+          <span v-if="isHistoryShown"> ▼ </span>
           <span v-else> ▶ </span> History
         </button>
         <div v-if="isHistoryShown" class="history-list">
-          <li v-for="(item,index) in histories" :key="index"> 
+          <li v-for="(item, index) in histories" :key="index">
             <span>{{ formatTime(item) }}</span>
           </li>
         </div>
@@ -44,8 +44,8 @@ export default {
       interval: null,
       startButton: require("../assets/play.svg"),
       histories: [],
-      isHistoryShown: false
-    }
+      isHistoryShown: false,
+    };
   },
   methods: {
     insertZero(time) {
@@ -89,16 +89,17 @@ export default {
     stop() {
       this.state = "stop";
       clearInterval(this.interval);
-      
+
       if (this.time > 0) {
         this.histories.push(this.time);
       }
 
       this.time = 0;
+      this.startButton = require("../assets/play.svg");
     },
     toggleHistory() {
       this.isHistoryShown = !this.isHistoryShown;
-    }
+    },
   },
 };
 </script>
