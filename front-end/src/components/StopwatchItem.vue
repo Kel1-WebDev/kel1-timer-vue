@@ -6,10 +6,10 @@
     </div>
     <div>
       <div class="blabla">
-        <p time class="time">00:00:00</p>
+        <p time class="time">{{ formatTime(time) }}</p>
         <div class="container">
-          <img start class="timer-btn" src="../assets/play.svg" />
-          <img stop class="timer-btn dark-blue" src="../assets/stop.svg" />
+          <img start class="timer-btn" src="../assets/play.svg" @click="start()"/>
+          <img stop class="timer-btn dark-blue" src="../assets/stop.svg" @click="stop()"/>
         </div>
       </div>
     </div>
@@ -25,6 +25,50 @@
 <script>
 export default {
   name: "StopwatchItem",
+  data: function () {
+    return {
+      time: 0,
+      state: "stop",
+      interval: null
+    }
+  },
+  methods: {
+    insertZero(time) {
+      if (time < 10)
+        return "0" + time;
+      return time;
+    },
+    formatTime(second) {
+      let divisor = 60 * 60;
+
+      const hour = Math.floor(second / divisor);
+      second = second % divisor;
+      divisor = divisor / 60;
+
+      const minute = Math.floor(second / divisor);
+      second = second % divisor;
+
+      return this.insertZero(hour) + ":" + this.insertZero(minute) + ":" + this.insertZero(second);
+    },
+    incrementTime() {
+      this.time++;
+    },
+    start() {
+      if ((this.state === "pause") || (this.state === "stop")) {
+        this.state = "start";
+        this.interval = setInterval(this.incrementTime, 1000);
+      }
+      else if (this.state === "start"){
+        this.state = "pause";
+        clearInterval(this.interval);
+      }
+    },
+    stop() {
+      this.state = "stop";
+      clearInterval(this.interval);
+      this.time = 0;
+    }
+  },
 };
 </script>
 
