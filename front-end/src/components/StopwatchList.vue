@@ -5,12 +5,13 @@
     </div>
     <div class="row">
       <div class="fixed-list">
-        <div
-          v-for="stopwatches in stopwatchLists"
-          :key="stopwatches.id"
-          id="container"
-        >
-          <StopwatchItem :name="stopwatches.timer_name" />
+        <div id="container">
+          <StopwatchItem
+            :name="stopwatches.timer_name" 
+            v-for="(stopwatches, index) in stopwatchLists"
+            :key="index"
+            @remove="stopwatchLists.splice(index, 1)"
+          />
         </div>
       </div>
       <div>
