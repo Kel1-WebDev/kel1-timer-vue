@@ -7,10 +7,15 @@
       <div class="fixed-list">
         <div id="container">
           <StopwatchItem
-            :name="stopwatches.timer_name" 
-            v-for="(stopwatches, index) in stopwatchLists"
-            :key="index"
-            @remove="stopwatchLists.splice(index, 1)"
+            :key="stopwatches.id"
+            :id="stopwatches.id"
+            :name="stopwatches.timer_name"
+            :time="stopwatches.time"
+            :state="stopwatches.state"
+            v-for="stopwatches in stopwatchLists"
+            @updateTime="updateTime"
+            @updateState="updateState"
+            @remove="removeTimer"
           />
         </div>
       </div>
@@ -52,17 +57,39 @@ export default {
     return {
       stopwatchName: "",
       stopwatchLists: [],
+      lastId: 0,
     };
   },
   methods: {
     addStopwatch() {
       var name = this.stopwatchName;
       var stopwatch = {
-        id: this.stopwatchLists.length,
+        id: this.lastId,
         timer_name: name,
+        time: 0,
+        state: "stop",
       };
 
       this.stopwatchLists.push(stopwatch);
+      this.lastId++;
+    },
+    searchTimer(id) {
+      for (let i = 0; i < this.stopwatchLists.length; i++) {
+        if (this.stopwatchLists[i].id == id) {
+          return i;
+        }
+      }
+
+      return -1;
+    },
+    updateTime(id, time) {
+      this.stopwatchLists[this.searchTimer(id)].time = time;
+    },
+    updateState(id, state) {
+      this.stopwatchLists[this.searchTimer(id)].state = state;
+    },
+    removeTimer(id) {
+      this.stopwatchLists.splice(this.searchTimer(id), 1);
     },
   },
 };

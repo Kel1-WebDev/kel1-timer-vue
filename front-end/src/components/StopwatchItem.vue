@@ -1,8 +1,13 @@
 <template>
   <div>
     <div class="container">
-      <h1 name class="name dark-blue">{{name}}</h1>
-      <img delete class="del-btn" src="../assets/delete.svg" @click="$emit('remove')"/>
+      <h1 name class="name dark-blue">{{ name }}</h1>
+      <img
+        delete
+        class="del-btn"
+        src="../assets/delete.svg"
+        @click="$emit('remove', this.id)"
+      />
     </div>
     <div>
       <div class="blabla">
@@ -37,16 +42,26 @@
 <script>
 export default {
   name: "StopwatchItem",
-  props:{
-    name:{
-      type:String,
-      required:true
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    time: {
+      type: Number,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
     },
   },
   data: function () {
     return {
-      time: 0,
-      state: "stop",
       interval: null,
       startButton: require("../assets/play.svg"),
       histories: [],
@@ -77,37 +92,40 @@ export default {
       );
     },
     incrementTime() {
-      this.time++;
+      this.$emit("updateTime", this.id, this.time + 1);
     },
     start() {
       if (this.state === "pause" || this.state === "stop") {
-        this.state = "start";
+        this.$emit("updateState", this.id, "start");
         this.interval = setInterval(this.incrementTime, 1000);
 
         this.startButton = require("../assets/pause.svg");
       } else if (this.state === "start") {
-        this.state = "pause";
+        this.$emit("updateState", this.id, "pause");
         clearInterval(this.interval);
 
         this.startButton = require("../assets/play.svg");
       }
     },
     stop() {
-      this.state = "stop";
+      this.$emit("updateState", this.id, "stop");
       clearInterval(this.interval);
 
       if (this.time > 0) {
         this.histories.push(this.time);
       }
 
-      this.time = 0;
+      this.$emit("updateTime", this.id, 0);
       this.startButton = require("../assets/play.svg");
     },
     toggleHistory() {
       this.isHistoryShown = !this.isHistoryShown;
     },
   },
-  emits: ['remove']
+  emits: ["remove", "updateState", "updateTime"],
+  beforeUnmount: function () {
+    clearInterval(this.interval);
+  },
 };
 </script>
 
