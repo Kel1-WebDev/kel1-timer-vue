@@ -47,6 +47,7 @@
 
 <script>
 import StopwatchItem from "./StopwatchItem.vue";
+import axios from "axios";
 
 export default {
   name: "StopwatchList",
@@ -90,6 +91,10 @@ export default {
     },
     removeTimer(id) {
       this.stopwatchLists.splice(this.searchTimer(id), 1);
+      axios.delete('http://localhost:3000/timer/' + id)
+        .then((response) => {
+          console.log(response);
+        })
     },
   },
 };
