@@ -47,6 +47,7 @@
 
 <script>
 import StopwatchItem from "./StopwatchItem.vue";
+import axios from "axios";
 
 export default {
   name: "StopwatchList",
@@ -59,6 +60,9 @@ export default {
       stopwatchLists: [],
       lastId: 0,
     };
+  },
+  beforeMount() {
+    this.loadStopwatch();
   },
   methods: {
     addStopwatch() {
@@ -90,6 +94,19 @@ export default {
     },
     removeTimer(id) {
       this.stopwatchLists.splice(this.searchTimer(id), 1);
+    },
+    loadStopwatch() {
+      axios.get("http://localhost:3000/timer").then(
+        function(stopwatches) {
+          if (stopwatches.data.length > 0) {
+            this.lastId = stopwatches.data[stopwatches.data.length - 1].id + 1;
+          } else {
+            this.lastId = 0;
+          }
+
+          this.stopwatchLists = stopwatches.data;
+        }.bind(this)
+      );
     },
   },
 };

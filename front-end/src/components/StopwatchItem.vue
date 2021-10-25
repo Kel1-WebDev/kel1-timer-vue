@@ -123,6 +123,12 @@ export default {
     },
   },
   emits: ["remove", "updateState", "updateTime"],
+  beforeMount: function () {
+    if(this.state === "start") {
+      this.interval = setInterval(this.incrementTime, 1000)
+      this.startButton = require("../assets/pause.svg");
+    }
+  },
   beforeUnmount: function () {
     clearInterval(this.interval);
   },
