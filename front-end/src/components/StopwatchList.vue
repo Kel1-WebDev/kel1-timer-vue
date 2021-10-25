@@ -64,6 +64,9 @@ export default {
   beforeMount() {
     this.loadStopwatch();
   },
+  async created() {
+    window.addEventListener("beforeunload", await this.updateStopwatch);
+  },
   methods: {
     addStopwatch() {
       var name = this.stopwatchName;
@@ -97,7 +100,7 @@ export default {
     },
     loadStopwatch() {
       axios.get("http://localhost:3000/timer").then(
-        function(stopwatches) {
+        function (stopwatches) {
           if (stopwatches.data.length > 0) {
             this.lastId = stopwatches.data[stopwatches.data.length - 1].id + 1;
           } else {
@@ -107,6 +110,14 @@ export default {
           this.stopwatchLists = stopwatches.data;
         }.bind(this)
       );
+    },
+    async updateStopwatch(event) {
+      event.preventDefault()
+      await axios
+        .put("http://localhost:3000/timer", { key: this.stopwatchLists })
+        .then((response) => localStorage.setItem("message", response))
+        .error((err) => localStorage.setItem("message", err))
+        .bind(this);
     },
   },
 };
