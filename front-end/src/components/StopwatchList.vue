@@ -67,20 +67,26 @@ export default {
   methods: {
     addStopwatch() {
       var name = this.stopwatchName;
-      var stopwatch = {
-        id: this.lastId,
-        timer_name: name,
-        time: 0,
-        state: "stop",
-      };
-
-      this.stopwatchLists.push(stopwatch);
-      this.lastId++;
       this.stopwatchName = "";
 
       if (this.stopwatchLists.length >= 10) {
         this.disableCreateButton();
       }
+
+      axios.post('http://localhost:3000/timer', { timer_name: name })
+        .then((response) => {
+          console.log(response);
+          var stopwatch = {
+            id: response.data.id,
+            timer_name: name,
+            time: 0,
+            state: "stop",
+          };
+          this.stopwatchLists.push(stopwatch);
+        })
+        .error((err) => {
+          console.error(err);
+        })
     },
     searchTimer(id) {
       for (let i = 0; i < this.stopwatchLists.length; i++) {
@@ -88,7 +94,6 @@ export default {
           return i;
         }
       }
-
       return -1;
     },
     updateTime(id, time) {
@@ -100,6 +105,10 @@ export default {
     removeTimer(id) {
       this.enableCreateButton();
       this.stopwatchLists.splice(this.searchTimer(id), 1);
+      axios.delete('http://localhost:3000/timer/' + id)
+        .then((response) => {
+          console.log(response);
+        })
     },
     loadStopwatch() {
       axios.get("http://localhost:3000/timer").then(
