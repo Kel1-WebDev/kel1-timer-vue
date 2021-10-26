@@ -88,7 +88,6 @@ export default {
           return i;
         }
       }
-
       return -1;
     },
     updateTime(id, time) {
@@ -99,6 +98,10 @@ export default {
     },
     removeTimer(id) {
       this.stopwatchLists.splice(this.searchTimer(id), 1);
+      axios.delete('http://localhost:3000/timer/' + id)
+        .then((response) => {
+          console.log(response);
+        })
     },
     loadStopwatch() {
       axios.get("http://localhost:3000/timer").then(
