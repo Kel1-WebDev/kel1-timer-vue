@@ -68,6 +68,15 @@ export default {
       isHistoryShown: false,
     };
   },
+  watch: {
+    state(newState, oldState) {
+      if ((oldState === "start") && (newState === "pause")) {
+        clearInterval(this.interval);
+
+        this.startButton = require("../assets/play.svg");
+      }
+    }
+  },
   methods: {
     insertZero(time) {
       if (time < 10) return "0" + time;

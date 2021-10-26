@@ -58,7 +58,7 @@ export default {
     return {
       stopwatchName: "",
       stopwatchLists: [],
-      lastId: 0,
+      activeId: null,
     };
   },
   beforeMount() {
@@ -78,7 +78,6 @@ export default {
 
       axios.post('http://localhost:3000/timer', { timer_name: name })
         .then((response) => {
-          console.log(response);
           var stopwatch = {
             id: response.data.id,
             timer_name: name,
@@ -104,6 +103,14 @@ export default {
     },
     updateState(id, state) {
       this.stopwatchLists[this.searchTimer(id)].state = state;
+
+      if (state === "start") {
+        if ((this.activeId != null) && (this.activeId != id)) {
+          this.stopwatchLists[this.searchTimer(this.activeId)].state = "pause";
+        }
+
+        this.activeId = id;
+      }
     },
     removeTimer(id) {
       this.enableCreateButton();
@@ -127,6 +134,8 @@ export default {
 
           const stopwatchesData = stopwatches.data.map((value) => {
             if (value.state === "start") {
+              this.activeId = value.id;
+
               return {
                 ...value,
                 time: value.time + timePassed
