@@ -114,6 +114,9 @@ export default {
         })
     },
     loadStopwatch() {
+      const closedTime = new Date(localStorage.getItem("closed-time"));
+      const timePassed = Math.round((new Date().getTime() - closedTime.getTime()) / 1000);
+
       axios.get("http://localhost:3000/timer").then(
         function (stopwatches) {
           if (stopwatches.data.length > 0) {
@@ -122,7 +125,18 @@ export default {
             this.lastId = 0;
           }
 
-          this.stopwatchLists = stopwatches.data;
+          const stopwatchesData = stopwatches.data.map((value) => {
+            if (value.state === "start") {
+              return {
+                ...value,
+                time: value.time + timePassed
+              }
+            }
+
+            return value;
+          });
+
+          this.stopwatchLists = stopwatchesData;
 
           if (this.stopwatchLists.length >= 10) {
             this.disableCreateButton();
@@ -130,7 +144,6 @@ export default {
         }.bind(this)
       );
     },
-<<<<<<< HEAD
     enableCreateButton() {
       document.getElementById("submit").disabled = false;
       document.getElementById("submit").style["background"] = "#191BA9";
@@ -141,15 +154,19 @@ export default {
       document.getElementById("submit").style["background"] = "#CCCCCC";
       document.getElementById("submit").style["border"] = "transparent";
     },
-=======
     async updateStopwatch(event) {
-      event.preventDefault()
+      event.preventDefault();
+
+      localStorage.setItem("closed-time", new Date());
+
+      if (this.stopwatchLists == 0)
+        return;
+
       await axios
         .put("http://localhost:3000/timer", { key: this.stopwatchLists })
         .then((response) => localStorage.setItem("message", response))
         .error((err) => localStorage.setItem("message", err))
         .bind(this);
->>>>>>> 656d072092a14ce0ac7e5fdf58bda0d7f7319909
     },
   },
 };
