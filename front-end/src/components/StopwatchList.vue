@@ -67,6 +67,12 @@ export default {
   methods: {
     addStopwatch() {
       var name = this.stopwatchName;
+      this.stopwatchName = "";
+
+      if (this.stopwatchLists.length >= 10) {
+        this.disableCreateButton();
+      }
+
       axios.post('http://localhost:3000/timer', { timer_name: name })
         .then((response) => {
           console.log(response);
@@ -97,6 +103,7 @@ export default {
       this.stopwatchLists[this.searchTimer(id)].state = state;
     },
     removeTimer(id) {
+      this.enableCreateButton();
       this.stopwatchLists.splice(this.searchTimer(id), 1);
       axios.delete('http://localhost:3000/timer/' + id)
         .then((response) => {
@@ -113,8 +120,22 @@ export default {
           }
 
           this.stopwatchLists = stopwatches.data;
+
+          if (this.stopwatchLists.length >= 10) {
+            this.disableCreateButton();
+          }
         }.bind(this)
       );
+    },
+    enableCreateButton() {
+      document.getElementById("submit").disabled = false;
+      document.getElementById("submit").style["background"] = "#191BA9";
+      document.getElementById("submit").style["border"] = "#191BA9";
+    },
+    disableCreateButton() {
+      document.getElementById("submit").disabled = true;
+      document.getElementById("submit").style["background"] = "#CCCCCC";
+      document.getElementById("submit").style["border"] = "transparent";
     },
   },
 };
