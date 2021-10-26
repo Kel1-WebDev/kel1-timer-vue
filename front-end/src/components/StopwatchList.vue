@@ -64,6 +64,9 @@ export default {
   beforeMount() {
     this.loadStopwatch();
   },
+  async created() {
+    window.addEventListener("beforeunload", await this.updateStopwatch);
+  },
   methods: {
     addStopwatch() {
       var name = this.stopwatchName;
@@ -112,7 +115,7 @@ export default {
     },
     loadStopwatch() {
       axios.get("http://localhost:3000/timer").then(
-        function(stopwatches) {
+        function (stopwatches) {
           if (stopwatches.data.length > 0) {
             this.lastId = stopwatches.data[stopwatches.data.length - 1].id + 1;
           } else {
@@ -127,6 +130,7 @@ export default {
         }.bind(this)
       );
     },
+<<<<<<< HEAD
     enableCreateButton() {
       document.getElementById("submit").disabled = false;
       document.getElementById("submit").style["background"] = "#191BA9";
@@ -136,6 +140,16 @@ export default {
       document.getElementById("submit").disabled = true;
       document.getElementById("submit").style["background"] = "#CCCCCC";
       document.getElementById("submit").style["border"] = "transparent";
+    },
+=======
+    async updateStopwatch(event) {
+      event.preventDefault()
+      await axios
+        .put("http://localhost:3000/timer", { key: this.stopwatchLists })
+        .then((response) => localStorage.setItem("message", response))
+        .error((err) => localStorage.setItem("message", err))
+        .bind(this);
+>>>>>>> 656d072092a14ce0ac7e5fdf58bda0d7f7319909
     },
   },
 };
