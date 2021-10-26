@@ -28,6 +28,7 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
+	<li><a href="#prerequisities">Prerequisities</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -57,7 +58,7 @@ cronômetro (in Italian) or commonly known as a stopwatch (in English) is an app
 ### Built With
 * HTML
 * CSS
-* jQuery
+* VueJS
 * NodeJS
 * PostgreSQL
 
@@ -83,7 +84,10 @@ cronômetro (in Italian) or commonly known as a stopwatch (in English) is an app
     * cd to `back-end` and install packages with `yarn install`
     * Copy `.env.example` to `.env`. Fill PORT with your desired API port or leave blank. Fill DB_USER and DB_PASSWORD with your database user and password
     * Run the server with `npx nodemon index.js`
-4. Open the `index.html` in browser(chrome, edge, firefox, opera, etc.) Or use live server extension on text editor.
+4. Configure front-end
+    * cd to `front-end` and install packages with `yarn install`
+    * Run the server with `yarn serve`
+    * Open http://localhost:8080/ in your browser
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -113,6 +117,7 @@ To use this app, you can:
 - [x] Create database model
 - [x] Create API
 - [x] Connect front-end to back-end 
+- [x] Refactor to use Vue.js
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
