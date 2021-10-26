@@ -76,6 +76,11 @@ export default {
 
       this.stopwatchLists.push(stopwatch);
       this.lastId++;
+      this.stopwatchName = "";
+
+      if (this.stopwatchLists.length >= 10) {
+        this.disableCreateButton();
+      }
     },
     searchTimer(id) {
       for (let i = 0; i < this.stopwatchLists.length; i++) {
@@ -93,6 +98,7 @@ export default {
       this.stopwatchLists[this.searchTimer(id)].state = state;
     },
     removeTimer(id) {
+      this.enableCreateButton();
       this.stopwatchLists.splice(this.searchTimer(id), 1);
     },
     loadStopwatch() {
@@ -105,8 +111,22 @@ export default {
           }
 
           this.stopwatchLists = stopwatches.data;
+
+          if (this.stopwatchLists.length >= 10) {
+            this.disableCreateButton();
+          }
         }.bind(this)
       );
+    },
+    enableCreateButton() {
+      document.getElementById("submit").disabled = false;
+      document.getElementById("submit").style["background"] = "#191BA9";
+      document.getElementById("submit").style["border"] = "#191BA9";
+    },
+    disableCreateButton() {
+      document.getElementById("submit").disabled = true;
+      document.getElementById("submit").style["background"] = "#CCCCCC";
+      document.getElementById("submit").style["border"] = "transparent";
     },
   },
 };
